@@ -5,11 +5,15 @@
 # Written by Vincent Batts <vbatts@hashbangbash.com>
 
 PRGNAM=docker
-VERSION=${VERSION:-1.13.0}
-BUILD=${BUILD:-1}
+VERSION=${VERSION:-1.12.5}
+#VERSION=${VERSION:-1.12.6}
+#VERSION=${VERSION:-1.13.0}
+BUILD=${BUILD:-2}
 TAG=${TAG:-_SBo}
 
-GITHASH=${GITHASH:-0a8c2e3}
+GITHASH=${GITHASH:-7392c3b}
+#GITHASH=${GITHASH:-78d1802}
+#GITHASH=${GITHASH:-49bf474}
 
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
@@ -54,17 +58,18 @@ find . ! -type l \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
  -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-unset GOPATH
+#unset GOPATH
 ### Those patches are no more needed ( when the script is ran against v1.12.5 )
 # back out this commit, which causes btrfs headers to not be found on slackware
 # since btrfs-progs removes the <btrfs/ioctl.h> header.
 # https://github.com/docker/docker/commit/6922f1be08111d889b0585b763b08f92d7a55e05
-# patch -p1 -R < $CWD/docker-btrfs.patch
+#patch -p1 -R < $CWD/docker-btrfs.patch
 
 # a couple of patches thait missed the 1.8.2 release window, but are essential
 #for patch in ${CWD}/patches/*.patch
 #do
-#	patch -p1 < ${patch}#done
+#	patch -p1 < ${patch}
+#done
 
 mkdir -p ${PKG}/usr/share/gocode/src/github.com/docker/docker
 cp -a .  ${PKG}/usr/share/gocode/src/github.com/docker/docker/
@@ -77,7 +82,7 @@ DOCKER_GITCOMMIT="$GITHASH" \
 mkdir -p ${PKG}/usr/libexec/docker ${PKG}/usr/bin
 #mv bundles/${VERSION}/dynbinary/dockerinit-${VERSION} ${PKG}/usr/libexec/docker/dockerinit   # used for docker 1.8.2
 #mv bundles/${VERSION}/dynbinary-client/docker-${VERSION} ${PKG}/usr/bin/docker               # used for docker 1.12.5
-mv bundles/${VERSION}/dynbinary-client/docker ${PKG}/usr/bin/docker                           # used for docker 1.13.0                             
+mv bundles/${VERSION}/dynbinary-client/docker ${PKG}/usr/bin/docker                           # used for docker 1.13.0
 
 # adding that binary for deamon
 #mv bundles/${VERSION}/dynbinary-daemon/dockerd-${VERSION} ${PKG}/usr/bin/dockerd            # used for docker 1.12.5
